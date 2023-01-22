@@ -21,7 +21,7 @@ public class Membership {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private MembershipType membershipType;
 
     @Column(nullable = false)
