@@ -1,6 +1,7 @@
 package com.example.membership.repository;
 
 import com.example.membership.entity.Membership;
+import com.example.membership.entity.MembershipType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +19,7 @@ public class MembershipRepositoryTest {
         //given
         final Membership membership = Membership.builder()
                 .userId("userId")
-                .membershipName("네이버")
+                .membershipType(MembershipType.NAVER)
                 .point(10000)
                 .build();
         //when
@@ -26,7 +27,7 @@ public class MembershipRepositoryTest {
         //then
         assertThat(result.getId()).isNotNull();
         assertThat(result.getUserId()).isEqualTo("userId");
-        assertThat(result.getMembershipName()).isEqualTo("네이버");
+    assertThat(result.getMembershipType()).isEqualTo(MembershipType.NAVER);
         assertThat(result.getPoint()).isEqualTo(10000);
     }
 }

@@ -22,7 +22,7 @@ public class Membership {
     private Long id;
 
     @Column(nullable = false, length = 20)
-    private String membershipName;
+    private MembershipType membershipType;
 
     @Column(nullable = false)
     private String userId;
