@@ -26,6 +26,7 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.google.code.gson:gson:2.9.0")
 }
 
 tasks.withType<Test> {
