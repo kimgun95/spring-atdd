@@ -2,11 +2,18 @@ package com.example.membership.service;
 
 import com.example.membership.entity.Membership;
 import com.example.membership.entity.MembershipType;
+import com.example.membership.exception.MembershipErrorResult;
+import com.example.membership.exception.MembershipException;
+import com.example.membership.repository.MembershipRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
@@ -15,13 +22,17 @@ public class MemberServiceTest {
 
     private String userId;
     private MembershipType membershipType;
-    private Integer poing;
+    private Integer point;
+    @Mock
+    private MembershipRepository membershipRepository;
+    @InjectMocks
+    private MembershipService target;
 
     @BeforeEach
     void setUp() {
         userId = "userId";
         membershipType = MembershipType.NAVER;
-        poing = 10000;
+        point = 10000;
     }
 
     @Test
