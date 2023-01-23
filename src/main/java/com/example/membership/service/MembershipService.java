@@ -1,5 +1,6 @@
 package com.example.membership.service;
 
+import com.example.membership.dto.MembershipResponse;
 import com.example.membership.entity.Membership;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
@@ -12,7 +13,7 @@ public class MembershipService {
 
     private MembershipRepository membershipRepository;
 
-    public Membership addMembership(String userId, MembershipType membershipType, Integer point) {
+    public MembershipResponse addMembership(String userId, MembershipType membershipType, Integer point) {
         Membership result = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
         if (result != null)
             throw new MembershipException(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER);
@@ -22,6 +23,11 @@ public class MembershipService {
                 .point(point)
                 .membershipType(membershipType)
                 .build();
-        return membershipRepository.save(membership);
+        Membership savedMembership = membershipRepository.save(membership);
+
+        return MembershipResponse.builder()
+                .id(savedMembership.getId())
+                .membershipType(savedMembership.getMembershipType())
+                .build();
     }
 }
