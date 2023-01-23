@@ -1,6 +1,7 @@
 package com.example.membership.controller;
 
 import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,16 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class MembershipControllerTest {
 
-    private MockMvc mockMvc;
     private Gson gson;
     @InjectMocks
     private MembershipController target;
+    private MockMvc mockMvc;
 
-    @Test
-    public void mockMvc는Null아님() {
+    @BeforeEach
+    void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(target)
                 .build();
-        assertThat(target).isNotNull();
-        assertThat(mockMvc).isNotNull();
     }
+
+
 }
