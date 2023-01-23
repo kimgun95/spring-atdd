@@ -49,7 +49,6 @@ public class MembershipControllerTest {
                 .build();
         gson = new Gson();
     }
-
     private MembershipRequest membershipRequest(final Integer point, final MembershipType membershipType) {
         return MembershipRequest.builder()
                 .point(point)
@@ -95,7 +94,6 @@ public class MembershipControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest());
     }
-
     @Test
     public void 멤버십등록실패_MemberService에서에러Throw() throws Exception {
         // given
