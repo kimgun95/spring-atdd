@@ -1,5 +1,6 @@
 package com.example.membership.controller;
 
+import com.example.membership.common.GlobalExceptionHandler;
 import com.example.membership.dto.MembershipRequest;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
@@ -36,6 +37,7 @@ public class MembershipControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(target)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
         gson = new Gson();
     }
