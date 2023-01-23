@@ -11,6 +11,9 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import static com.example.membership.constants.MembershipConstants.USER_ID_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +56,13 @@ public class MembershipControllerTest {
                 .membershipType(membershipType)
                 .build();
     }
+    private static Stream<Arguments> invalidMembershipAddParameter() {
+        return Stream.of(
+                Arguments.of(null, MembershipType.NAVER),
+                Arguments.of(-1, MembershipType.NAVER),
+                Arguments.of(10000, null)
+        );
+    }
     @Test
     public void 멤버십등록실패_사용자식별값이헤더에없음() throws Exception {
         // given
@@ -67,8 +78,9 @@ public class MembershipControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest());
     }
-    @Test
-    public void 멤버십등록실패_포인트가null() throws Exception {
+    @ParameterizedTest
+    @MethodSource("invalidMembershipAddParameter")
+    public void 멤버십등록실패_잘못된파라미터(final Integer point, final MembershipType membershipType) throws Exception {
         // given
         final String url = "/api/v1/memberships";
 
@@ -76,45 +88,14 @@ public class MembershipControllerTest {
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
                         .header(USER_ID_HEADER, "12345")
-                        .content(gson.toJson(membershipRequest(null, MembershipType.NAVER)))
+                        .content(gson.toJson(membershipRequest(point, membershipType)))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
         // then
         resultActions.andExpect(status().isBadRequest());
     }
-    @Test
-    public void 멤버십등록실패_포인트가음수() throws Exception {
-        // given
-        final String url = "/api/v1/memberships";
 
-        // when
-        final ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .header(USER_ID_HEADER, "12345")
-                        .content(gson.toJson(membershipRequest(-1, MembershipType.NAVER)))
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andExpect(status().isBadRequest());
-    }
-    @Test
-    public void 멤버십등록실패_멤버십종류가Null() throws Exception {
-        // given
-        final String url = "/api/v1/memberships";
-
-        // when
-        final ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .header(USER_ID_HEADER, "12345")
-                        .content(gson.toJson(membershipRequest(10000, null)))
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andExpect(status().isBadRequest());
-    }
     @Test
     public void 멤버십등록실패_MemberService에서에러Throw() throws Exception {
         // given
