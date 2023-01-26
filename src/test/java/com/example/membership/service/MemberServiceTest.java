@@ -24,9 +24,9 @@ import static org.mockito.Mockito.*;
 public class MemberServiceTest {
 
 
-    private String userId;
-    private MembershipType membershipType;
-    private Integer point;
+    private final String userId = "userId";
+    private final MembershipType membershipType = MembershipType.NAVER;
+    private final Integer point = 10000;
     @Mock
     private MembershipRepository membershipRepository;
     @InjectMocks
@@ -38,12 +38,6 @@ public class MemberServiceTest {
                 .point(point)
                 .membershipType(MembershipType.NAVER)
                 .build();
-    }
-    @BeforeEach
-    void setUp() {
-        userId = "userId";
-        membershipType = MembershipType.NAVER;
-        point = 10000;
     }
     @Test
     public void 멤버십등록실패_이미존재() {

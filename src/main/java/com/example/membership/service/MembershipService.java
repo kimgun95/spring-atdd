@@ -13,17 +13,17 @@ public class MembershipService {
 
     private MembershipRepository membershipRepository;
 
-    public MembershipResponse addMembership(String userId, MembershipType membershipType, Integer point) {
-        Membership result = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
+    public MembershipResponse addMembership(final String userId, final MembershipType membershipType, final Integer point) {
+        final Membership result = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
         if (result != null)
             throw new MembershipException(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER);
 
-        Membership membership = Membership.builder()
+        final Membership membership = Membership.builder()
                 .userId(userId)
                 .point(point)
                 .membershipType(membershipType)
                 .build();
-        Membership savedMembership = membershipRepository.save(membership);
+        final Membership savedMembership = membershipRepository.save(membership);
 
         return MembershipResponse.builder()
                 .id(savedMembership.getId())
