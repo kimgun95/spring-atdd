@@ -31,19 +31,19 @@ public class MemberServiceTest {
     private MembershipRepository membershipRepository;
     @InjectMocks
     private MembershipService target;
-    private Membership membership;
-
-    @BeforeEach
-    void setUp() {
-        userId = "userId";
-        membershipType = MembershipType.NAVER;
-        point = 10000;
-        membership = Membership.builder()
+    private Membership membership() {
+        return Membership.builder()
                 .id(-1L)
                 .userId(userId)
                 .point(point)
                 .membershipType(MembershipType.NAVER)
                 .build();
+    }
+    @BeforeEach
+    void setUp() {
+        userId = "userId";
+        membershipType = MembershipType.NAVER;
+        point = 10000;
     }
     @Test
     public void 멤버십등록실패_이미존재() {
@@ -59,7 +59,7 @@ public class MemberServiceTest {
     public void 멤버십등록성공() {
         // given
         doReturn(null).when(membershipRepository).findByUserIdAndMembershipType(userId, membershipType);
-        doReturn(membership).when(membershipRepository).save(any(Membership.class));
+        doReturn(membership()).when(membershipRepository).save(any(Membership.class));
 
         // when
         final MembershipResponse result = target.addMembership(userId, membershipType, point);
