@@ -1,19 +1,17 @@
 package com.example.membership.service;
 
-import com.example.membership.dto.MembershipResponse;
+import com.example.membership.dto.MembershipAddResponse;
 import com.example.membership.entity.Membership;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
 import com.example.membership.exception.MembershipException;
 import com.example.membership.repository.MembershipRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Member;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,7 +55,7 @@ public class MemberServiceTest {
         doReturn(membership()).when(membershipRepository).save(any(Membership.class));
 
         // when
-        final MembershipResponse result = target.addMembership(userId, membershipType, point);
+        final MembershipAddResponse result = target.addMembership(userId, membershipType, point);
 
         // then
         assertThat(result.getId()).isNotNull();
