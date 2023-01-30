@@ -1,6 +1,7 @@
 package com.example.membership.controller;
 
 import com.example.membership.common.GlobalExceptionHandler;
+import com.example.membership.dto.MembershipDetailResponse;
 import com.example.membership.dto.MembershipRequest;
 import com.example.membership.dto.MembershipAddResponse;
 import com.example.membership.entity.MembershipType;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static com.example.membership.constants.MembershipConstants.USER_ID_HEADER;
@@ -140,5 +142,33 @@ public class MembershipControllerTest {
 
         assertThat(response.getMembershipType()).isEqualTo(MembershipType.NAVER);
         assertThat(response.getId()).isNotNull();
+    }
+    @Test
+    public void 멤버십조회실패_사용자식별값이헤더에없음() throws Exception {
+        //given
+        final String url = "/api/v1/memberships";
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+        );
+        //then
+        resultActions.andExpect(status().isBadRequest());
+    }
+    @Test
+    public void 멤버십조회성공() throws Exception {
+        //given
+        final String url = "/api/v1/memberships";
+        doReturn(Arrays.asList(
+                MembershipDetailResponse.builder().build(),
+                MembershipDetailResponse.builder().build(),
+                MembershipDetailResponse.builder().build()
+        )).when(membershipService).getMembershipList("12345");
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+                        .header(USER_ID_HEADER, "12345")
+        );
+        //then
+        resultActions.andExpect(status().isOk());
     }
 }
