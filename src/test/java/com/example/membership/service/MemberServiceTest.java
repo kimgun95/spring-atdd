@@ -82,7 +82,6 @@ public class MemberServiceTest {
         //then
         assertThat(result.size()).isEqualTo(3);
     }
-
     @Test
     public void 멤버십상세조회실패_존재하지않음() {
         //given
@@ -92,5 +91,25 @@ public class MemberServiceTest {
                 () -> target.getMembership(membershipId, userId));
         //then
         assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.MEMBERSHIP_NOT_FOUND);
+    }
+    @Test
+    public void 멤버십상세조회실패_본인아님() {
+        //given
+        doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
+        //when
+        final MembershipException result = assertThrows(MembershipException.class,
+                () -> target.getMembership(membershipId, "notOwner"));
+        //then
+        assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.NOT_MEMBERSHIP_OWNER);
+    }
+    @Test
+    public void 멤버십상세조회성공() {
+        //given
+        doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
+        //when
+        final MembershipDetailResponse result = target.getMembership(membershipId, userId);
+        //then
+        assertThat(result.getMembershipType()).isEqualTo(membershipType);
+        assertThat(result.getPoint()).isEqualTo(point);
     }
 }
