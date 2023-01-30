@@ -8,6 +8,8 @@ import com.example.membership.exception.MembershipException;
 import com.example.membership.repository.MembershipRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MembershipService {
 
@@ -29,5 +31,9 @@ public class MembershipService {
                 .id(savedMembership.getId())
                 .membershipType(savedMembership.getMembershipType())
                 .build();
+    }
+
+    public List<Membership> getMembershipList(final String userId) {
+        return membershipRepository.findAllByuserId(userId);
     }
 }

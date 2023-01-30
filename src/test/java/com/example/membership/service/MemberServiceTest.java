@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Member;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,7 +50,6 @@ public class MemberServiceTest {
         //then
         assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER);
     }
-
     @Test
     public void 멤버십등록성공() {
         // given
@@ -66,5 +67,17 @@ public class MemberServiceTest {
         verify(membershipRepository, times(1)).findByUserIdAndMembershipType(userId, membershipType);
         verify(membershipRepository, times(1)).save(any(Membership.class));
     }
-
+    @Test
+    public void 멤버십목록조회() {
+        //given
+        doReturn(Arrays.asList(
+                Membership.builder().build(),
+                Membership.builder().build(),
+                Membership.builder().build()
+        )).when(membershipRepository).findAllByuserId(userId);
+        //when
+        final List<Membership> result = target.getMembershipList(userId);
+        //then
+        assertThat(result.size()).isEqualTo(3);
+    }
 }
