@@ -1,6 +1,7 @@
 package com.example.membership.service;
 
 import com.example.membership.dto.MembershipAddResponse;
+import com.example.membership.dto.MembershipDetailResponse;
 import com.example.membership.entity.Membership;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
@@ -9,6 +10,7 @@ import com.example.membership.repository.MembershipRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MembershipService {
@@ -33,7 +35,15 @@ public class MembershipService {
                 .build();
     }
 
-    public List<Membership> getMembershipList(final String userId) {
-        return membershipRepository.findAllByuserId(userId);
+    public List<MembershipDetailResponse> getMembershipList(final String userId) {
+        final List<Membership> membershipList = membershipRepository.findAllByuserId(userId);
+        return membershipList.stream()
+                .map(membership -> MembershipDetailResponse.builder()
+                        .id(membership.getId())
+                        .membershipType(membership.getMembershipType())
+                        .point(membership.getPoint())
+                        .createdAt(membership.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

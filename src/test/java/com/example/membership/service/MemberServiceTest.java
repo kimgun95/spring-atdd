@@ -1,6 +1,7 @@
 package com.example.membership.service;
 
 import com.example.membership.dto.MembershipAddResponse;
+import com.example.membership.dto.MembershipDetailResponse;
 import com.example.membership.entity.Membership;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
@@ -74,7 +75,7 @@ public class MemberServiceTest {
                 Membership.builder().build()
         )).when(membershipRepository).findAllByuserId(userId);
         //when
-        final List<Membership> result = target.getMembershipList(userId);
+        final List<MembershipDetailResponse> result = target.getMembershipList(userId);
         //then
         assertThat(result.size()).isEqualTo(3);
     }
