@@ -171,4 +171,16 @@ public class MembershipControllerTest {
         //then
         resultActions.andExpect(status().isOk());
     }
+
+    @Test
+    public void 멤버십상세조회실패_사용자식별값이헤더에없음() throws Exception{
+        //given
+        final String url = "/api/v1/memberships/-1";
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+        );
+        //then
+        resultActions.andExpect(status().isBadRequest());
+    }
 }
