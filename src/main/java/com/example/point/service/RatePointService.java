@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class RatePointService {
 
     public int calculateAmount(final int price) {
-        return 100;
+        return price * 1 / 100;
     }
 }
