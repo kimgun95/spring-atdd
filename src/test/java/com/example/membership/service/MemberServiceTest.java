@@ -7,6 +7,7 @@ import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
 import com.example.membership.exception.MembershipException;
 import com.example.membership.repository.MembershipRepository;
+import com.example.point.service.RatePointService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +35,8 @@ public class MemberServiceTest {
     private MembershipRepository membershipRepository;
     @InjectMocks
     private MembershipService target;
+    @Mock
+    private RatePointService ratePointService;
 
     private Membership membership() {
         return Membership.builder()
@@ -138,6 +141,34 @@ public class MemberServiceTest {
         doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
         //when
         target.removeMembership(membershipId, userId);
+        //then
+    }
+    @Test
+    public void 멤버십적립실패_존재하지않음() {
+        //given
+        doReturn(Optional.empty()).when(membershipRepository).findById(membershipId);
+        //when
+        final MembershipException result = assertThrows(MembershipException.class,
+                () -> target.accumulateMembershipPoint(membershipId, userId, point));
+        //then
+        assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.MEMBERSHIP_NOT_FOUND);
+    }
+    @Test
+    public void 멤버십적립실패_본인이아님() {
+        //given
+        doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
+        //when
+        final MembershipException result = assertThrows(MembershipException.class,
+                () -> target.accumulateMembershipPoint(membershipId, "notOwner", point));
+        //then
+        assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.NOT_MEMBERSHIP_OWNER);
+    }
+    @Test
+    public void 멤버십적립성공() {
+        //given
+        doReturn(Optional.of(membership())).when(membershipRepository).findById(membershipId);
+        //when
+        target.accumulateMembershipPoint(membershipId, userId, point);
         //then
     }
 }
