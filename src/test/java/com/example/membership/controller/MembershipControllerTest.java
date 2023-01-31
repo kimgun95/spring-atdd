@@ -2,7 +2,7 @@ package com.example.membership.controller;
 
 import com.example.membership.common.GlobalExceptionHandler;
 import com.example.membership.dto.MembershipDetailResponse;
-import com.example.membership.dto.MembershipRequest;
+import com.example.membership.dto.MembershipAddRequest;
 import com.example.membership.dto.MembershipAddResponse;
 import com.example.membership.entity.MembershipType;
 import com.example.membership.exception.MembershipErrorResult;
@@ -10,7 +10,6 @@ import com.example.membership.exception.MembershipException;
 import com.example.membership.service.MembershipService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +39,7 @@ public class MembershipControllerTest {
 
     private final String membershipsUrl = "/api/v1/memberships";
     private final String membershipsDetailUrl = "/api/v1/memberships/{id}";
+    private final String membershipsAccumulateUrl = "/api/v1/memberships/{id}/accumulate";
     private MockMvc mockMvc;
     private Gson gson;
     @InjectMocks
@@ -55,8 +55,8 @@ public class MembershipControllerTest {
                 .build();
         gson = new Gson();
     }
-    private MembershipRequest membershipRequest(final Integer point, final MembershipType membershipType) {
-        return MembershipRequest.builder()
+    private MembershipAddRequest membershipRequest(final Integer point, final MembershipType membershipType) {
+        return MembershipAddRequest.builder()
                 .point(point)
                 .membershipType(membershipType)
                 .build();

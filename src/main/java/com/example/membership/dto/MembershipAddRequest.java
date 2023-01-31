@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
-public class MembershipRequest {
+public class MembershipAddRequest {
 
     @NotNull
     @Min(0)
