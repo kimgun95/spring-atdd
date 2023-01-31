@@ -1,5 +1,6 @@
 package com.example.membership.controller;
 
+import com.example.membership.dto.MembershipAccumulateRequest;
 import com.example.membership.dto.MembershipDetailResponse;
 import com.example.membership.dto.MembershipAddRequest;
 import com.example.membership.dto.MembershipAddResponse;
@@ -55,6 +56,16 @@ public class MembershipController {
             @PathVariable final Long id) {
 
         membershipService.removeMembership(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/api/v1/memberships/{id}/accumulate")
+    public ResponseEntity<Void> accumulateMembershipPoint(
+            @RequestHeader(USER_ID_HEADER) final String userId,
+            @RequestBody @Valid final MembershipAccumulateRequest membershipAccumulateRequest,
+            @PathVariable final Long id) {
+
+        membershipService.accumulateMembershipPoint(id, userId, membershipAccumulateRequest.getPoint());
         return ResponseEntity.noContent().build();
     }
 }

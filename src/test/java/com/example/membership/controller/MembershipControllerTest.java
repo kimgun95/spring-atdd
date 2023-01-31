@@ -266,4 +266,32 @@ public class MembershipControllerTest {
         //then
         resultActions.andExpect(status().isBadRequest());
     }
+    @Test
+    public void 멤버십적립실패_포인트가음수() throws Exception {
+        //given
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(membershipsAccumulateUrl, -1)
+                        .header(USER_ID_HEADER, "userId")
+                        .content(gson.toJson(membershipAccumulateRequest(-10000)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        resultActions.andExpect(status().isBadRequest());
+    }
+    @Test
+    public void 멤버십적립성공() throws Exception {
+        //given
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(membershipsAccumulateUrl, -1)
+                        .header(USER_ID_HEADER, "userId")
+                        .content(gson.toJson(membershipAccumulateRequest(10000)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        resultActions.andExpect(status().isNoContent());
+    }
 }
