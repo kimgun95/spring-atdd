@@ -1,6 +1,7 @@
 package com.example.membership.controller;
 
 import com.example.membership.common.GlobalExceptionHandler;
+import com.example.membership.dto.MembershipAccumulateRequest;
 import com.example.membership.dto.MembershipDetailResponse;
 import com.example.membership.dto.MembershipAddRequest;
 import com.example.membership.dto.MembershipAddResponse;
@@ -59,6 +60,11 @@ public class MembershipControllerTest {
         return MembershipAddRequest.builder()
                 .point(point)
                 .membershipType(membershipType)
+                .build();
+    }
+    private MembershipAccumulateRequest membershipAccumulateRequest(final Integer point) {
+        return MembershipAccumulateRequest.builder()
+                .point(point)
                 .build();
     }
     private static Stream<Arguments> invalidMembershipAddParameter() {
@@ -246,5 +252,18 @@ public class MembershipControllerTest {
         );
         //then
         resultActions.andExpect(status().isNoContent());
+    }
+    @Test
+    public void 멤버십적립실패_사용자식별값이헤더에없음() throws Exception {
+        //given
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(membershipsAccumulateUrl, -1)
+                        .content(gson.toJson(membershipAccumulateRequest(10000)))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        resultActions.andExpect(status().isBadRequest());
     }
 }
